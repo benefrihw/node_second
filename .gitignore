@@ -1,6 +1,10 @@
-node_modules
-# Keep environment variables out of version control
+# Created by https://www.toptal.com/developers/gitignore/api/visualstudiocode,windows,dotenv,node
+# Edit at https://www.toptal.com/developers/gitignore?templates=visualstudiocode,windows,dotenv,node
+
+### dotenv ###
 .env
+
+### Node ###
 # Logs
 logs
 *.log
@@ -76,7 +80,6 @@ web_modules/
 .yarn-integrity
 
 # dotenv environment variable files
-.env
 .env.development.local
 .env.test.local
 .env.production.local
@@ -96,15 +99,30 @@ dist
 
 # Gatsby files
 .cache/
+# Comment in the public line in if your project uses Gatsby and not Next.js
+# https://nextjs.org/blog/next-9-1#public-directory-support
+# public
+
+# vuepress build output
+.vuepress/dist
 
 # vuepress v2.x temp and cache directory
 .temp
 
+# Docusaurus cache and generated files
+.docusaurus
+
 # Serverless directories
 .serverless/
 
+# FuseBox cache
+.fusebox/
+
 # DynamoDB Local files
 .dynamodb/
+
+# TernJS port file
+.tern-port
 
 # Stores VSCode versions used for testing VSCode extensions
 .vscode-test
@@ -116,9 +134,58 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
-# IDE - VS code
-/.idea
+### Node Patch ###
+# Serverless Webpack directories
+.webpack/
 
-# IDE - Jetbrains
+# Optional stylelint cache
+
+# SvelteKit build / generate output
+.svelte-kit
+
+### VisualStudioCode ###
 .vscode/*
-/.vscode
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+
+# Local History for Visual Studio Code
+.history/
+
+# Built Visual Studio Code Extensions
+*.vsix
+
+### VisualStudioCode Patch ###
+# Ignore all local history of files
+.history
+.ionide
+
+### Windows ###
+# Windows thumbnail cache files
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+
+# Dump file
+*.stackdump
+
+# Folder config file
+[Dd]esktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# Windows Installer files
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+
+# Windows shortcuts
+*.lnk
+
+# End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,windows,dotenv,node
