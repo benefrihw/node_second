@@ -23,7 +23,7 @@ router.post('/resumes', authMiddleware, async (req, res, next) => {
   }
 
   // 5. 자기소개 글자 수가 150자 보다 짧은 경우
-  if (content.length < 150) {
+  if (content.length < 10) {
     return res
       .status(400)
       .json({ message: '자기소개는 150자 이상 작성해야 합니다.' });
@@ -44,7 +44,7 @@ router.post('/resumes', authMiddleware, async (req, res, next) => {
   return res.status(200).json({
     message: '이력서가 생성되었습니다.',
     resume: {
-      id: resume.id,
+      resumeId: resume.resumeId,
       userId: resume.userId,
       title: resume.title,
       content: resume.content,
@@ -90,8 +90,8 @@ router.get('/resumes', authMiddleware, async (req, res, next) => {
 
   // 6. 이력서 ID, 작성자 이름, 제목, 자기소개, 지원 상태, 생성일시, 수정일시의 목록을 반환합니다.
   const isExistResumes = resumes.map((resume) => ({
-    id: resume.id,
-    authorName: resume.user.name,
+    resumeId: resume.resumeId,
+    name: resume.user.name,
     title: resume.title,
     content: resume.content,
     status: resume.status,
@@ -115,7 +115,7 @@ router.get('/resumes/:resumeId', authMiddleware, async (req, res, next) => {
   // 3. 이력서 정보를 조회합니다.
   const resume = await prisma.resumes.findFirst({
     where: {
-      id: +resumeId,
+      resumeId: +resumeId,
       userId: +userId,
     },
     include: {
@@ -134,8 +134,8 @@ router.get('/resumes/:resumeId', authMiddleware, async (req, res, next) => {
 
   // 4. 이력서 ID, 이름, 제목, 자기소개, 지원상태, 생성일시, 수정일시를 반환합니다.
   const detailResume = {
-    id: resume.id,
-    authorName: resume.user.name,
+    resumeId: resume.resumeId,
+    name: resume.user.name,
     title: resume.title,
     content: resume.content,
     status: resume.status,
@@ -143,36 +143,62 @@ router.get('/resumes/:resumeId', authMiddleware, async (req, res, next) => {
     updatedAt: resume.updatedAt,
   };
 
-  return res
-    .status(200)
-    .json({
-      message: '이력서 상제 조회가 완료되었습니다.',
-      resume: detailResume,
-    });
+  return res.status(200).json({
+    message: '이력서 상제 조회가 완료되었습니다.',
+    resume: detailResume,
+  });
 });
 
 /** 이력서 수정 API */
-// 1. 사용자 정보를 req.user를 통해서 받습니다.
+router.patch('resumes/:resumeId', authMiddleware, async (req, res, next) => {
+  // 1. 사용자 정보를 req.user를 통해서 받습니다.
+  const { userId } = req.user;
 
+  // 2. 이력서 ID를 req.params로 전달 받습니다.
+  const { resumeId } = req.params;
 
-// 2. 이력서 ID를 req.params로 전달 받습니다.
+  // 3. 제목, 자기소개를 req.body로 전달 받습니다.
+  const { title, content } = req.body;
 
+  // 4. 제목, 자기소개가 둘 다 없는 경우
+  if (!title && !content) {
+    return res.status(400).json({ message: '수정 할 정보를 입력해주세요.' });
+  };
 
-// 3. 제목, 자기소개를 req.body로 전달 받습니다.
-
-
-// 4. 제목, 자기소개가 둘 다 없는 경우
-
-
-// 5. 이력서 정보를 조회합니다.
+  // 5. 이력서 정보를 조회합니다.
+  const resume = await prisma.resumes.findFirst({
+    where: {
+      resumeId: +resumeId,
+      userId: +userId,
+    },
+    include: {
+      user: {
+        select: {
+          name: true,
+        },
+      },
+    },
+  });
 
 
 // 6. 이력서 정보가 없는 경우
-
+if(!resume) {
+    return res.status(400).json({ message: '이력서가 존재하지 않습니다.'})
+};
 
 // 7. 수정 된 이력서 ID, 작성자 ID, 제목, 자기소개, 지원상태, 생성일시, 수정일시를 반환합니다.
+const updateResume = {
+    resumeId: resume.resumeId,
+    userId: resume.userId,
+    title,
+    content,
+    status: resume.status,
+    createdAt: resume.createdAt,
+    updatedAt: new Date()
+};
 
-
+return res.status(200).json({ message: '이력서가 수정되었습니다.', data: updateResume })
+});
 
 /** 이력서 삭제 API */
 // 1. 사용자 정보를 req.user를 통해서 받습니다.
@@ -188,5 +214,6 @@ router.get('/resumes/:resumeId', authMiddleware, async (req, res, next) => {
 
 
 // 5. 삭제 된 이력서 ID를 반환합니다.
+
 
 export default router;
