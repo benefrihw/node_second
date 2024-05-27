@@ -23,7 +23,7 @@ router.post('/resumes', authMiddleware, async (req, res, next) => {
   }
 
   // 5. 자기소개 글자 수가 150자 보다 짧은 경우
-  if (content.length < 10) {
+  if (content.length < 150) {
     return res
       .status(400)
       .json({ message: '자기소개는 150자 이상 작성해야 합니다.' });
@@ -150,7 +150,8 @@ router.get('/resumes/:resumeId', authMiddleware, async (req, res, next) => {
 });
 
 /** 이력서 수정 API */
-router.patch('resumes/:resumeId', authMiddleware, async (req, res, next) => {
+router.patch('/:resumeId', authMiddleware, async(req, res, next)=>{
+  try{
   // 1. 사용자 정보를 req.user를 통해서 받습니다.
   const { userId } = req.user;
 
@@ -179,27 +180,30 @@ router.patch('resumes/:resumeId', authMiddleware, async (req, res, next) => {
       },
     },
   });
-
+console.log(resume)
 
 // 6. 이력서 정보가 없는 경우
 if(!resume) {
     return res.status(400).json({ message: '이력서가 존재하지 않습니다.'})
 };
 
-// 7. 수정 된 이력서 ID, 작성자 ID, 제목, 자기소개, 지원상태, 생성일시, 수정일시를 반환합니다.
-const updateResume = {
-    resumeId: resume.resumeId,
-    userId: resume.userId,
-    title,
-    content,
-    status: resume.status,
-    createdAt: resume.createdAt,
-    updatedAt: new Date()
-};
-
-return res.status(200).json({ message: '이력서가 수정되었습니다.', data: updateResume })
+// 7. 변경된 내용으로 이력서를 수정합니다.
+const updateResume = await prisma.resumes.update({
+    where: {
+        resumeId: +resumeId
+    }, data: {
+        title,
+        content,
+        updatedAt: new Date()
+    },
 });
-
+console.log(updateResume);
+// 8. updateResume에서 수정된 값을 반환합니다.
+return res.status(200).json({ message: '이력서가 수정되었습니다.', data: updateResume})
+  }catch(error){
+    next(error)
+  }
+});
 /** 이력서 삭제 API */
 // 1. 사용자 정보를 req.user를 통해서 받습니다.
 

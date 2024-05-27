@@ -4,6 +4,7 @@ import { prisma } from '../utils/prisma.util.js';
 export default async function (req, res, next) {
   try {
     const authorization = req.headers['authorization'];
+    console.log(req.headers)
     if (!authorization) throw new Error('인증 정보가 없습니다.');
     console.log(authorization);
 

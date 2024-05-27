@@ -13,7 +13,8 @@ const ACCESS_TOKEN_SECRET_KEY = process.env.ACCESS_TOKEN_SECRET_KEY;
 const REFRESH_TOKEN_SECRET_KEY = process.env.REFRESH_TOKEN_SECRET_KEY;
 
 app.use(express.json());
-app.use('/auth', [AuthRouter], [ResumesRouter]);
+app.use('/auth', [AuthRouter]);
+app.use('/resumes', [ResumesRouter])
 app.use(errorHandler);
 
 app.listen(PORT, (req, res) => {
