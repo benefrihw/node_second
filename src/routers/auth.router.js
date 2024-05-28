@@ -59,10 +59,11 @@ router.post('/sign-up', async (req, res, next) => {
     });
 
     // 8. UserInfos 테이블에 email, name, role, createdAt, updatedAt을 이용해 사용자 정보 생성
-    const userInfo = await prisma.userInfos.create({
+    const {userInfoId, ...userInfo} = await prisma.userInfos.create({
       data: {
         userId: users.userId,
-        role: 'APPLICANT',
+        email: users.email,
+        name: users.name,
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -72,14 +73,7 @@ router.post('/sign-up', async (req, res, next) => {
     // 9. 사용자 ID, 이메일, 이름, 역할, 생성일시, 수정일시를 반환
     return res.status(200).json({
       message: '회원가입이 완료되었습니다.',
-      userInfo: {
-        userId: userInfo.userId,
-        email,
-        name,
-        role: userInfo.role,
-        createdAt: userInfo.createdAt,
-        updatedAt: userInfo.updatedAt,
-      },
+      data: userInfo
     });
   } catch (err) {
     next(err);

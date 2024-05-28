@@ -36,7 +36,6 @@ router.post('/resumes', authMiddleware, async (req, res, next) => {
         userId: userId,
         title,
         content,
-        // status,
         createdAt: new Date(),
         updatedAt: new Date(),
       },
