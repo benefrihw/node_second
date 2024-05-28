@@ -9,16 +9,15 @@ export default async function (req, res, next) {
     console.log(authorization);
 
     const [tokenType, token] = authorization.split(' ');
-    console.log;
 
     if (tokenType !== 'Bearer')
       throw new Error('지원하지 않는 인증 방식입니다.');
 
     const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET_KEY);
-    console.log(decodedToken);
+    // console.log(decodedToken);
     const userId = decodedToken.userId;
 
-    console.log(+userId);
+    // console.log(+userId);
     const user = await prisma.users.findFirst({
       where: { userId: +userId },
     });

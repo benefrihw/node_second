@@ -213,7 +213,7 @@ router.patch('/:resumeId', authMiddleware, async (req, res, next) => {
         updatedAt: new Date(),
       },
     });
-    console.log(updateResume);
+    // console.log(updateResume);
     // 8. updateResume에서 수정된 값을 반환합니다.
     return res
       .status(200)
