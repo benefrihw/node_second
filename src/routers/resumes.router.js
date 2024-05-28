@@ -146,7 +146,7 @@ router.get('/:resumeId', authMiddleware, async (req, res, next) => {
     };
 
     return res.status(200).json({
-      message: '이력서 상제 조회가 완료되었습니다.',
+      message: '이력서 상세 조회가 완료되었습니다.',
       resume: detailResume,
     });
   } catch (error) {
@@ -252,7 +252,7 @@ router.delete('/:resumeId', authMiddleware, async (req, res, next) => {
     // 5. 삭제 된 이력서 ID를 반환합니다.
     return res
       .status(200)
-      .json({ message: '이력서 삭제가 완료됐습니다.', data: resumeId });
+      .json({ message: '이력서가 삭제되었습니다.', data: resumeId });
   } catch (error) {
     next(error);
   }
