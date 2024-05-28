@@ -24,7 +24,7 @@ router.post('/resumes', authMiddleware, async (req, res, next) => {
     }
 
     // 5. 자기소개 글자 수가 150자 보다 짧은 경우
-    if (content.length < 10) {
+    if (content.length < 150) {
       return res
         .status(400)
         .json({ message: '자기소개는 150자 이상 작성해야 합니다.' });
@@ -36,23 +36,16 @@ router.post('/resumes', authMiddleware, async (req, res, next) => {
         userId: userId,
         title,
         content,
-        status: 'APPLY',
+        // status,
         createdAt: new Date(),
         updatedAt: new Date(),
       },
     });
 
+    // console.log(resume);
     return res.status(200).json({
       message: '이력서가 생성되었습니다.',
-      resume: {
-        resumeId: resume.resumeId,
-        userId: resume.userId,
-        title: resume.title,
-        content: resume.content,
-        status: resume.status,
-        createdAt: resume.createdAt,
-        updatedAt: resume.updatedAt,
-      },
+      data: resume,
     });
   } catch (error) {
     next(error);
@@ -104,12 +97,10 @@ router.get('/resumes', authMiddleware, async (req, res, next) => {
       updatedAt: resume.updatedAt,
     }));
 
-    return res
-      .status(200)
-      .json({
-        message: '이력서 조회가 완료되었습니다',
-        resume: isExistResumes,
-      });
+    return res.status(200).json({
+      message: '이력서 조회가 완료되었습니다',
+      resume: isExistResumes,
+    });
   } catch (error) {
     next(error);
   }
