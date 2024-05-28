@@ -4,12 +4,12 @@ import { prisma } from '../utils/prisma.util.js';
 export default async function (req, res, next) {
   try {
     const authorization = req.headers['authorization'];
-    console.log(req.headers)
+    console.log(req.headers);
     if (!authorization) throw new Error('인증 정보가 없습니다.');
     console.log(authorization);
 
     const [tokenType, token] = authorization.split(' ');
-    console.log
+    console.log;
 
     if (tokenType !== 'Bearer')
       throw new Error('지원하지 않는 인증 방식입니다.');
@@ -39,7 +39,9 @@ export default async function (req, res, next) {
       case 'TokenExpiredError':
         return res.status(401).json({ message: '인증 정보가 만료되었습니다.' });
       case 'JsonWebTokenError':
-        return res.status(401).json({ message: '인증 정보가 유효하지 않습니다.' });
+        return res
+          .status(401)
+          .json({ message: '인증 정보가 유효하지 않습니다.' });
       default:
         return res
           .status(401)
