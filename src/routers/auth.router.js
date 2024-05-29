@@ -34,7 +34,7 @@ router.post('/sign-up', async (req, res, next) => {
     });
 
     if (isExistUser) {
-      return res.status(409).json({ message: '이미 가입 된 사용자입니다.' });
+      return res.status(400).json({ message: '이미 가입 된 사용자입니다.' });
     }
 
     // 5. 비밀번호가 6자리 미만인 경우
